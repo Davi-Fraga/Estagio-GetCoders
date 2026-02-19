@@ -1,0 +1,94 @@
+<div class="page">
+  <header class="header">
+    <h1>Cadastro de Pessoas</h1>
+    <p>Spring Boot + PostgreSQL + Angular</p>
+  </header>
+
+  <section class="card">
+    <h2>{{ editingCpf ? 'Editar pessoa' : 'Nova pessoa' }}</h2>
+
+    <form [formGroup]="form" (ngSubmit)="salvar()" class="form">
+      <div class="grid">
+        <label>
+          CPF*
+          <input type="text" formControlName="cpf" placeholder="Somente numeros" />
+        </label>
+
+        <label>
+          Nome*
+          <input type="text" formControlName="nome" />
+        </label>
+
+        <label>
+          Endereco
+          <input type="text" formControlName="endereco" />
+        </label>
+
+        <label>
+          Telefone
+          <input type="text" formControlName="telefone" />
+        </label>
+
+        <label>
+          Data de nascimento
+          <input type="date" formControlName="dataNascimento" />
+        </label>
+
+        <label>
+          Escolaridade
+          <input type="text" formControlName="escolaridade" />
+        </label>
+      </div>
+
+      <div class="actions">
+        <button type="submit">{{ editingCpf ? 'Atualizar' : 'Salvar' }}</button>
+        <button type="button" class="secondary" (click)="cancelarEdicao()" *ngIf="editingCpf">
+          Cancelar
+        </button>
+      </div>
+    </form>
+
+    <p class="error" *ngIf="erro">{{ erro }}</p>
+  </section>
+
+  <section class="card">
+    <div class="list-header">
+      <h2>Lista de pessoas</h2>
+      <button type="button" class="secondary" (click)="carregar()" [disabled]="carregando">
+        Recarregar
+      </button>
+    </div>
+
+    <p *ngIf="carregando">Carregando...</p>
+
+    <table *ngIf="!carregando && pessoas.length > 0">
+      <thead>
+        <tr>
+          <th>CPF</th>
+          <th>Nome</th>
+          <th>Telefone</th>
+          <th>Endereco</th>
+          <th>Data</th>
+          <th>Escolaridade</th>
+          <th>Acoes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let pessoa of pessoas">
+          <td>{{ pessoa.cpf }}</td>
+          <td>{{ pessoa.nome }}</td>
+          <td>{{ pessoa.telefone }}</td>
+          <td>{{ pessoa.endereco }}</td>
+          <td>{{ pessoa.dataNascimento }}</td>
+          <td>{{ pessoa.escolaridade }}</td>
+          <td class="actions-cell">
+            <button type="button" class="secondary" (click)="editar(pessoa)">Editar</button>
+            <button type="button" class="danger" (click)="deletar(pessoa.cpf)">Excluir</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p *ngIf="!carregando && pessoas.length === 0">Nenhuma pessoa cadastrada.</p>
+  </section>
+</div>
